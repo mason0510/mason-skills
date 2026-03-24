@@ -131,6 +131,13 @@ find skills -path '*/scripts/*.py' -print0 | xargs -0 -I{} python3 -m py_compile
 这次首发只公开 3 个已经相对通用的 skill。
 更复杂的 `issue-managed-*` 工作流暂时没有包含进公开版，因为它仍然带有较强的本地工作流假设，需要再做一轮去私有化和泛化。
 
+## ✅ 自动校验
+
+仓库已包含 GitHub Actions 自动检查：
+- shell 语法检查
+- Python 脚本编译检查
+- 快速 secret / 本地路径扫描
+
 ## 🤝 贡献
 
 欢迎提交：

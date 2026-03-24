@@ -1,0 +1,45 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install jq and tmux
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq tmux
+
+      - name: Validate shell scripts
+        run: |
+          mapfile -d '' files < <(find skills -path '*/scripts/*.sh' -print0)
+          if [ "${#files[@]}" -gt 0 ]; then
+            printf '%s\0' "${files[@]}" | xargs -0 -I{} bash -n '{}'
+          fi
+
+      - name: Validate python scripts
+        run: |
+          mapfile -d '' files < <(find skills -path '*/scripts/*.py' -print0)
+          if [ "${#files[@]}" -gt 0 ]; then
+            printf '%s\0' "${files[@]}" | xargs -0 -I{} python3 -m py_compile '{}'
+          fi
+
+      - name: Fast secret/path scan
+        run: |
+          ! rg -n '/Users/|/home/|gho_[A-Za-z0-9_]+|AKIA[0-9A-Z]{16}' . \
+            --glob '!README.md' \
+            --glob '!README_EN.md' \
+            --glob '!USAGE_AND_MAINTENANCE.md' \
+            --glob '!CONTRIBUTING.md'

@@ -131,6 +131,13 @@ find skills -path '*/scripts/*.py' -print0 | xargs -0 -I{} python3 -m py_compile
 This first release intentionally publishes only the 3 skills that are already portable enough.
 The more complex `issue-managed-*` workflow is held back for another iteration because it still carries stronger local workflow assumptions.
 
+## ✅ Automated validation
+
+This repository includes a GitHub Actions workflow for:
+- shell syntax validation
+- Python script compilation checks
+- fast secret / local-path scanning
+
 ## 🤝 Contributing
 
 Contributions welcome for:
